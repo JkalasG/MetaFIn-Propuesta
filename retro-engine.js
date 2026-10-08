@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initBusinessTabs();
   initCharacterSelect();
   initMiniGame();
+  initInterviewAudioPlayers();
 });
 
 /* ==========================================================================
@@ -22,6 +23,8 @@ let audioCtx = null;
 let bgmPlaying = false;
 let bgmInterval = null;
 let musicEnabled = true;
+let bgmPausedForInterview = false;
+let bgmVolumeFactor = 1.0;
 
 // Complete Super Mario Bros Overworld Chiptune Theme (Melody + Bass + Drum tick)
 const MARIO_BROS_THEME = [
@@ -251,7 +254,7 @@ function playRetroMusic() {
     clearInterval(bgmInterval);
     bgmInterval = null;
   }
-  if (!musicEnabled) {
+  if (!musicEnabled || bgmPausedForInterview) {
     bgmPlaying = false;
     return;
   }
@@ -263,7 +266,7 @@ function playRetroMusic() {
   bgmPlaying = true;
 
   bgmInterval = setInterval(() => {
-    if (!bgmPlaying || !musicEnabled) return;
+    if (!bgmPlaying || !musicEnabled || bgmPausedForInterview) return;
     const now = ctx.currentTime;
     const note = MARIO_BROS_THEME[step % MARIO_BROS_THEME.length];
 
@@ -272,7 +275,7 @@ function playRetroMusic() {
       return;
     }
 
-    // Lead Melody (Square wave with warm low-pass filter & smooth volume)
+    // Lead Melody (Square wave with warm low-pass filter & smooth volume scaled by bgmVolumeFactor)
     if (note.f > 0) {
       const oscM = ctx.createOscillator();
       const filterM = ctx.createBiquadFilter();
@@ -284,7 +287,8 @@ function playRetroMusic() {
       filterM.type = "lowpass";
       filterM.frequency.setValueAtTime(2000, now);
 
-      gainM.gain.setValueAtTime(0.011, now);
+      const targetGain = 0.011 * bgmVolumeFactor;
+      gainM.gain.setValueAtTime(targetGain, now);
       gainM.gain.exponentialRampToValueAtTime(0.0003, now + note.d);
 
       oscM.connect(filterM);
@@ -295,7 +299,7 @@ function playRetroMusic() {
       oscM.stop(now + note.d);
     }
 
-    // Warm Arpeggiated Bass (Triangle wave, soft & deep)
+    // Warm Arpeggiated Bass (Triangle wave, soft & deep scaled by bgmVolumeFactor)
     if (note.b > 0) {
       const oscB = ctx.createOscillator();
       const gainB = ctx.createGain();
@@ -303,7 +307,8 @@ function playRetroMusic() {
       oscB.type = "triangle";
       oscB.frequency.setValueAtTime(note.b, now);
 
-      gainB.gain.setValueAtTime(0.013, now);
+      const targetGainB = 0.013 * bgmVolumeFactor;
+      gainB.gain.setValueAtTime(targetGainB, now);
       gainB.gain.exponentialRampToValueAtTime(0.0003, now + note.d);
 
       oscB.connect(gainB);
@@ -322,11 +327,120 @@ function playRetroMusic() {
   }, BGM_TEMPO);
 }
 
+function pauseRetroBgmForInterview() {
+  bgmPausedForInterview = true;
+  if (bgmInterval) {
+    clearInterval(bgmInterval);
+    bgmInterval = null;
+  }
+  bgmPlaying = false;
+}
+
+function resumeRetroBgmAfterInterview() {
+  bgmPausedForInterview = false;
+  bgmVolumeFactor = 0.05;
+  let fadeStep = 0;
+  const fadeInterval = setInterval(() => {
+    fadeStep++;
+    bgmVolumeFactor = Math.min(1.0, 0.05 + fadeStep * 0.1);
+    if (bgmVolumeFactor >= 1.0) {
+      clearInterval(fadeInterval);
+    }
+  }, 120);
+
+  if (musicEnabled) {
+    const ctx = getAudioContext();
+    if (ctx.state === "suspended") {
+      ctx.resume().then(() => playRetroMusic());
+    } else {
+      playRetroMusic();
+    }
+  }
+}
+
+/* ==========================================================================
+   INTERVIEW REAL AUDIO PLAYERS (Docente, Consultor, Estudiante)
+   ========================================================================== */
+let activeInterviewAudio = null;
+let activeInterviewBtn = null;
+
+function initInterviewAudioPlayers() {
+  const interviewButtons = document.querySelectorAll(".btn-audio-interview");
+
+  interviewButtons.forEach(btn => {
+    const audioSrc = btn.getAttribute("data-audio-src");
+    const quoteBubble = btn.closest(".quote-bubble");
+    const btnText = btn.querySelector(".btn-audio-text") || btn;
+
+    let audioElement = new Audio(audioSrc);
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      // If clicking on the currently playing track: Pause it
+      if (activeInterviewAudio === audioElement && !audioElement.paused) {
+        audioElement.pause();
+        return;
+      }
+
+      // If another interview was playing, pause & reset it
+      if (activeInterviewAudio && activeInterviewAudio !== audioElement) {
+        activeInterviewAudio.pause();
+        activeInterviewAudio.currentTime = 0;
+        if (activeInterviewBtn) {
+          const prevText = activeInterviewBtn.querySelector(".btn-audio-text") || activeInterviewBtn;
+          prevText.innerHTML = "▶ ESCUCHAR AUDIO";
+          activeInterviewBtn.classList.remove("is-playing");
+          const prevBubble = activeInterviewBtn.closest(".quote-bubble");
+          if (prevBubble) prevBubble.classList.remove("playing");
+        }
+      }
+
+      // Set active audio
+      activeInterviewAudio = audioElement;
+      activeInterviewBtn = btn;
+
+      // 1. Immediately pause background game music
+      pauseRetroBgmForInterview();
+
+      // 2. Update UI
+      btnText.innerHTML = "⏸ PAUSA";
+      btn.classList.add("is-playing");
+      if (quoteBubble) quoteBubble.classList.add("playing");
+
+      // 3. Play interview audio
+      audioElement.play().catch(err => {
+        console.warn("No se pudo reproducir el archivo de audio:", audioSrc, err);
+      });
+    });
+
+    // On pause: Update button & smoothly resume background game music
+    audioElement.addEventListener("pause", () => {
+      btnText.innerHTML = "▶ ESCUCHAR AUDIO";
+      btn.classList.remove("is-playing");
+      if (quoteBubble) quoteBubble.classList.remove("playing");
+      // Resume background music with fade in
+      resumeRetroBgmAfterInterview();
+    });
+
+    // On ended: Reset button & smoothly resume background game music
+    audioElement.addEventListener("ended", () => {
+      btnText.innerHTML = "▶ ESCUCHAR AUDIO";
+      btn.classList.remove("is-playing");
+      if (quoteBubble) quoteBubble.classList.remove("playing");
+      activeInterviewAudio = null;
+      activeInterviewBtn = null;
+      // Resume background music with fade in
+      resumeRetroBgmAfterInterview();
+    });
+  });
+}
+
 function initRetroAudioAndBgm() {
   const musicToggleBtn = document.getElementById("btn-toggle-music");
   
   const ensureAudioIsPlaying = () => {
-    if (!musicEnabled) return;
+    if (!musicEnabled || bgmPausedForInterview) return;
     const ctx = getAudioContext();
     if (ctx.state === "suspended") {
       ctx.resume().then(() => {
