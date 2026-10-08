@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaFin — El RPG de las Finanzas Personales | Pitch Arcade</title>
+  <meta name="description" content="MetaFin: Convierte el control de tus finanzas en una aventura RPG gamificada de 3 minutos diarios. Pitch interactivo estilo retro 8-bit.">
+  <link rel="stylesheet" href="retro-arcade.css">
+</head>
+<body>
+
+  <!-- CRT Scanlines Filter Overlay -->
+  <div class="crt-overlay" id="crt-screen"></div>
+
+  <!-- ANIMATED RETRO SPACE & STARFIELD BACKGROUND -->
+  <div class="retro-space-bg">
+    <div class="pixel-stars"></div>
+    <div class="pixel-stars-2"></div>
+    <div class="pixel-stars-3"></div>
+    <div class="retro-grid-floor"></div>
+  </div>
+
+  <!-- ARCADE TOP HUD NAVBAR -->
+  <header class="arcade-hud">
+    <div class="arcade-container hud-wrapper">
+      <a href="#" class="hud-logo">
+        <img src="metafin.png" alt="MetaFin Logo" class="hud-logo-img">
+        <span class="hud-logo-text">METAFIN</span>
+      </a>
+
+      <!-- Real-time HUD Status Badges -->
+      <div class="hud-stats">
+        <div class="hud-badge level">
+          <span>NIVEL</span>
+          <strong>04</strong>
+        </div>
+        <div class="hud-badge coins">
+          <span>🪙</span>
+          <strong id="hud-coins-val">1,250 XP</strong>
+        </div>
+        <div class="hud-badge streak">
+          <strong id="hud-streak-val">🔥 12 Días</strong>
+        </div>
+      </div>
+
+      <!-- Retro Utility Controls (Music & CRT) -->
+      <div class="hud-controls">
+        <button class="btn-retro-control" id="btn-toggle-music" title="Activar / Silenciar Música Retro">
+          🎵 MÚSICA: ON
+        </button>
+        <button class="btn-retro-control" id="btn-toggle-crt" title="Activar/Desactivar Filtro CRT (Líneas de pantalla retro)">
+          📺 CRT: OFF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN ARCADE CONTAINER -->
+  <main class="arcade-container">
+
+    <!-- HERO / TITLE SCREEN (Fits completely in 100vh initial screen) -->
+    <section class="hero-arcade">
+      <!-- Official MetaFin Centerpiece Logo (logos.png) -->
+      <div class="hero-logo-frame">
+        <img src="logos.png" alt="MetaFin Logo" class="hero-logo-img">
+      </div>
+
+      <div class="pixel-banner">★ INSERTA UNA MONEDA PARA SUBIR DE NIVEL TUS FINANZAS ★</div>
+      <h1 class="arcade-title">METAFIN QUEST</h1>
+      <p class="hero-tagline">
+        Transformamos la pesadilla del dinero en una <strong>aventura RPG gamificada</strong> de 3 minutos diarios.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#nivel-problema" class="btn-arcade-primary">
+          🕹️ INICIAR PITCH ARCADE
+        </a>
+        <a href="#mini-game" class="btn-arcade-secondary">
+          ⚡ PROBAR MINI-JUEGO
+        </a>
+      </div>
+
+      <!-- Retro Controls helper indication -->
+      <div class="hero-audio-tip">
+        <span>💡 CONTROLES:</span> En el menú superior puedes silenciar con <strong class="tip-highlight">🎵 MÚSICA</strong> o encender el filtro de pantalla arcade antigua con <strong class="tip-highlight">📺 CRT</strong>.
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         NIVEL 1: EL PROBLEMA (ENFRENTANDO AL JEFE FINAL)
+         ==================================================================== -->
+    <section class="arcade-section" id="nivel-problema">
+      <div class="level-header">
+        <span class="level-badge pink">NIVEL 1: ENFRENTANDO AL JEFE FINAL</span>
+        <h2 class="section-title">¿CUÁL ES EL PROBLEMA?</h2>
+      </div>
+
+      <!-- SÍNTESIS EJECUTIVA PARA INVERSIONISTAS -->
+      <div class="investor-highlight-box">
+        <div class="highlight-label">
+          <span>⚡</span> SÍNTESIS EJECUTIVA DEL DOLOR (PITCH RESUMEN)
+        </div>
+        <p class="highlight-text">
+          Más del <strong>80% de las personas</strong> sufre estrés financiero no por falta de ingresos, sino por <strong>falta de disciplina</strong>, <strong>apps tradicionales aburridas</strong> con registro engorroso e incapacidad de separar el ahorro de metas frente a los <strong>gastos imprevistos e inflación</strong>.
+        </p>
+      </div>
+
+      <!-- BOSS FIGHT ARENA INTERACTIVA -->
+      <div class="boss-arena">
+        <div class="boss-hud">
+          <div class="boss-name">
+            <span>👾</span> JEFE FINAL: "EL MONSTRUO DE LOS GASTOS FANTASMA & ABURRIMIENTO"
+          </div>
+        </div>
+
+        <!-- EXPLICACIÓN CLAVE PARA EL INVERSIONISTA -->
+        <p class="boss-description-lead">
+          💡 <strong>¿Qué representa este Jefe para el negocio?</strong> Representa la fuga silenciosa de hasta el <strong>35% al 40% del ingreso mensual</strong> que se pierde en micro-gastos cotidianos olvidados (salidas, pasajes, compras por impulso) y la fricción que hace que el usuario abandone las hojas de cálculo al quinto día.
+        </p>
+
+        <div class="boss-hp-bar-container">
+          <div class="boss-hp-fill" id="boss-hp-fill"></div>
+          <div class="boss-hp-text" id="boss-hp-text">HP: 100 / 100</div>
+        </div>
+
+        <!-- BOTONES DE ATAQUE CON REGISTROS REALES -->
+        <div class="boss-attacks-wrapper">
+          <div class="boss-attacks-title">⚔️ DERROTA AL MONSTRUO REGISTRANDO GASTOS EN &lt; 3 SEGUNDOS:</div>
+          <div class="boss-attacks-grid">
+            <button class="btn-expense-attack" data-expense-name="Salida al Cine / Amigos (50 Bs)" data-damage="25">
+              🎬 REGISTRAR SALIDAS (-25 HP)
+            </button>
+            <button class="btn-expense-attack" data-expense-name="Pasajes y Taxis Semanales (30 Bs)" data-damage="25">
+              🚕 REGISTRAR PASAJES (-25 HP)
+            </button>
+            <button class="btn-expense-attack" data-expense-name="Comida / Café Diario (25 Bs)" data-damage="25">
+              ☕ REGISTRAR COMIDA (-25 HP)
+            </button>
+            <button class="btn-expense-attack" data-expense-name="Gasto Imprevisto / Medicinas (80 Bs)" data-damage="25">
+              💊 REGISTRAR IMPREVISTO (-25 HP)
+            </button>
+          </div>
+          <div class="boss-feedback" id="boss-action-feedback"></div>
+        </div>
+
+        <!-- STATS IMPACTANTES -->
+        <div class="stat-cards-grid">
+          <div class="stat-pixel-card">
+            <div class="stat-pixel-number">85%</div>
+            <div class="stat-pixel-label">Tasa de Abandono</div>
+            <p class="stat-pixel-desc">Los usuarios desinstalan apps tradicionales en el primer mes por aburrimiento y fricción.</p>
+          </div>
+
+          <div class="stat-pixel-card">
+            <div class="stat-pixel-number">78%</div>
+            <div class="stat-pixel-label">Sin Fondo de Emergencia</div>
+            <p class="stat-pixel-desc">No diferencian el ahorro a futuro de los gastos imprevistos, rompiendo sus metas al primer choque.</p>
+          </div>
+
+          <div class="stat-pixel-card">
+            <div class="stat-pixel-number">3 de 4</div>
+            <div class="stat-pixel-label">Descontrol en Salidas & Extras</div>
+            <p class="stat-pixel-desc">Gastos hormiga no contemplados consumen el presupuesto mensual sin que el usuario lo note.</p>
+          </div>
+        </div>
+
+        <!-- CITAS EXTRAÍDAS DE LAS ENTREVISTAS REALES (textos2) -->
+        <div class="interview-logs">
+          <div class="interview-logs-title">
+            <span>📜</span> REGISTRO DE BATALLA — CITAS REALES DE ENTREVISTAS DE VALIDACIÓN:
+          </div>
+          <div class="quotes-grid">
+            <div class="quote-bubble">
+              <span class="quote-user">👨‍🏫 Docente Universitario (40-45 años):</span>
+              <p class="quote-body">"Se pagan facturas y colegios primero, pero el control se pierde por completo en las salidas extras, el cine y gastos que no se contemplaron."</p>
+            </div>
+            <div class="quote-bubble">
+              <span class="quote-user">💼 Consultor (>50 años):</span>
+              <p class="quote-body">"La mayor frustración son los imprevistos (multas, enfermedades). Las apps actuales son rígidas y no contemplan ciclos de pago personalizados."</p>
+            </div>
+            <div class="quote-bubble">
+              <span class="quote-user">🎓 Estudiante Universitaria (~25 años):</span>
+              <p class="quote-body">"Cuando suben los precios no alcanza y me desmotiva no tener disciplina. El fondo de emergencia y el ahorro planificado son dos cosas totalmente distintas."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         NIVEL 2: LA SOLUCIÓN (ARMAS & HABILIDADES)
+         ==================================================================== -->
+    <section class="arcade-section" id="nivel-solucion">
+      <div class="level-header">
+        <span class="level-badge cyan">NIVEL 2: ARMAS & HABILIDADES</span>
+        <h2 class="section-title">¿CUÁL ES LA SOLUCIÓN?</h2>
+      </div>
+
+      <!-- SÍNTESIS EJECUTIVA DE LA SOLUCIÓN -->
+      <div class="investor-highlight-box">
+        <div class="highlight-label">
+          <span>💡</span> LA SOLUCIÓN METAFIN A SIMPLE VISTA
+        </div>
+        <p class="highlight-text">
+          MetaFin es un <strong>ecosistema financiero local-first gamificado</strong> que combina: <strong>registro ultra-rápido en ≤ 3 segundos</strong>, <strong>psicología de rachas y misiones de 3 minutos</strong> (estilo Duolingo), <strong>metas duales blindadas</strong> y <strong>3 mundos narrativos</strong> que evolucionan con la salud financiera del usuario.
+        </p>
+      </div>
+
+      <!-- INVENTARIO DE POWER-UPS -->
+      <div class="powerups-grid">
+        <div class="powerup-card">
+          <div class="powerup-icon-frame">⚡</div>
+          <h3 class="powerup-title">REGISTRO RELÁMPAGO</h3>
+          <span class="powerup-badge">⏱️ EN MENOS DE 3 SEGUNDOS</span>
+          <p class="powerup-desc">
+            Arquitectura Local-First Offline. Registra gastos al instante sin pantallas de carga ni formularios pesados. Sincroniza al conectar.
+          </p>
+        </div>
+
+        <div class="powerup-card">
+          <div class="powerup-icon-frame">🛡️</div>
+          <h3 class="powerup-title">ESCUDOS ANTI-RACHA</h3>
+          <span class="powerup-badge">🔥 PSICOLOGÍA POSITIVA</span>
+          <p class="powerup-desc">
+            Si olvidas registrar un día o tienes un desvío, no pierdes tu progreso ni tu moral. Los escudos protegen tu racha y premian la constancia.
+          </p>
+        </div>
+
+        <div class="powerup-card">
+          <div class="powerup-icon-frame">🧪</div>
+          <h3 class="powerup-title">METAS DUALES (MISIONES)</h3>
+          <span class="powerup-badge">💰 AHORRO + FONDO EMERGENCIA</span>
+          <p class="powerup-desc">
+            Separa automáticamente el dinero para tus sueños (viajes, compras) del escudo para imprevistos (salud, inflación, arreglos).
+          </p>
+        </div>
+
+        <div class="powerup-card">
+          <div class="powerup-icon-frame">🏰</div>
+          <h3 class="powerup-title">ECOSISTEMA DE 3 MUNDOS</h3>
+          <span class="powerup-badge">🎨 PERSONALIZACIÓN TOTAL</span>
+          <p class="powerup-desc">
+            Elige tu atmósfera favorita: <em>Jardín Zen</em> (naturaleza y calma), <em>Mascota Cozy</em> (cuidado virtual) o <em>Expedición Gamer</em> (mazmorras RPG).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         NIVEL 3: PROPUESTA DE VALOR (COMPARADOR 8-BIT & KPIS DIVERTIDOS)
+         ==================================================================== -->
+    <section class="arcade-section" id="nivel-propuesta">
+      <div class="level-header">
+        <span class="level-badge gold">NIVEL 3: SALA DE TROFEOS</span>
+        <h2 class="section-title">¿CUÁL ES LA PROPUESTA DE VALOR?</h2>
+      </div>
+
+      <div class="investor-highlight-box" style="border-color: var(--neon-yellow);">
+        <div class="highlight-label" style="color: var(--neon-yellow);">
+          <span>🏆</span> PROMESA NUCLEAR DE VALOR
+        </div>
+        <p class="highlight-text">
+          <em>"Convertir la fricción y el estrés del dinero en una aventura adictiva que construye disciplina financiera real sin hojas de cálculo, sin tecnicismos y sin aburrimiento."</em>
+        </p>
+      </div>
+
+      <!-- ARENA COMPARADORA LADO A LADO -->
+      <div class="comparator-arena">
+        <!-- Apps Tradicionales -->
+        <div class="comparator-col bad">
+          <div class="col-header">
+            <h3>❌ APPS TRADICIONALES</h3>
+            <p style="color: #ff8899; font-size: 0.9rem;">Hojas de cálculo frías y tediosas</p>
+          </div>
+          <ul class="comparator-list">
+            <li>
+              <span class="comparator-icon">💤</span>
+              <div><strong>Tedio Total:</strong> Formularios largos que provocan abandono en menos de 30 días.</div>
+            </li>
+            <li>
+              <span class="comparator-icon">📉</span>
+              <div><strong>Culpa & Castigo:</strong> Gráficos rojos de deuda que generan ansiedad financiera.</div>
+            </li>
+            <li>
+              <span class="comparator-icon">🧱</span>
+              <div><strong>Rígidas:</strong> No contemplan gastos imprevistos ni quincenas personalizadas.</div>
+            </li>
+            <li>
+              <span class="comparator-icon">🔒</span>
+              <div><strong>Aisladas:</strong> Experiencia solitaria sin incentivos compartidos ni recompensas.</div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- MetaFin Quest -->
+        <div class="comparator-col good">
+          <div class="col-header">
+            <h3>✨ METAFIN QUEST</h3>
+            <p style="color: var(--neon-green); font-size: 0.9rem;">El RPG interactivo de tus finanzas</p>
+          </div>
+          <ul class="comparator-list">
+            <li>
+              <span class="comparator-icon">🎁</span>
+              <div><strong>Recompensas Reales:</strong> Desbloqueo de cofres con beneficios tangibles, descuentos aliados y avatares exclusivos.</div>
+            </li>
+            <li>
+              <span class="comparator-icon">🏆</span>
+              <div><strong>Ranking de Ahorro Grupal (Gremios):</strong> Competencias sanas de quién ahorró más y mantuvo mayor racha sin exponer montos en dinero.</div>
+            </li>
+            <li>
+              <span class="comparator-icon">📊</span>
+              <div><strong>Métricas Divertidas:</strong> Medallas de <em>"Domador de Antojos"</em>, <em>"Racha Invicta"</em> y porcentaje de blindaje de emergencias.</div>
+            </li>
+            <li>
+              <span class="comparator-icon">🚀</span>
+              <div><strong>Registro en 3 Segundos:</strong> Interfaz ágil offline-first diseñada para no fallar jamás.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         NIVEL 4: PÚBLICO OBJETIVO (SELECCIÓN DE JUGADOR)
+         ==================================================================== -->
+    <section class="arcade-section" id="nivel-publico">
+      <div class="level-header">
+        <span class="level-badge green">NIVEL 4: SELECCIÓN DE JUGADOR</span>
+        <h2 class="section-title">¿QUIÉN ES NUESTRO PÚBLICO OBJETIVO?</h2>
+      </div>
+
+      <div class="investor-highlight-box" style="border-color: var(--neon-green);">
+        <div class="highlight-label" style="color: var(--neon-green);">
+          <span>🎯</span> PERFIL Y SEGMENTACIÓN DE CLIENTES
+        </div>
+        <p class="highlight-text">
+          Enfocado en <strong>nativos digitales</strong> que buscan autonomía financiera, estructurado en tres perfiles clave validados en nuestras entrevistas:
+        </p>
+      </div>
+
+      <!-- SELECTOR DE PERSONAJES -->
+      <div class="character-select-grid">
+        <!-- Player 1 -->
+        <div class="character-card active">
+          <div class="player-tag">JUGADOR 1 — EL EXPLORADOR</div>
+          <div class="character-avatar">🎓</div>
+          <h3 class="character-name">UNIVERSITARIO / GEN Z</h3>
+          <div class="character-demographics">18 a 24 Años • Nativos Móviles</div>
+          <ul class="character-traits">
+            <li><strong>Dolor Principal:</strong> Gastos impulsivos, falta de disciplina de ahorro y miedo a invertir.</li>
+            <li><strong>Motivación:</strong> Retos diarios estilo Duolingo, simuladores de inversión y metas compartidas con amigos.</li>
+            <li><strong>Disposición de Pago:</strong> Freemium y micro-suscripciones accesibles (15 a 30 Bs/mes).</li>
+          </ul>
+        </div>
+
+        <!-- Player 2 -->
+        <div class="character-card">
+          <div class="player-tag">JUGADOR 2 — EL NÓMADA</div>
+          <div class="character-avatar">💻</div>
+          <h3 class="character-name">FREELANCER / INDEPENDIENTE</h3>
+          <div class="character-demographics">25 a 35 Años • Ingresos Variables</div>
+          <ul class="character-traits">
+            <li><strong>Dolor Principal:</strong> Ingresos irregulares, inflación y vulnerabilidad ante gastos imprevistos.</li>
+            <li><strong>Motivación:</strong> Crear un fondo de emergencia sólido y categorizar gastos profesionales vs personales.</li>
+            <li><strong>Disposición de Pago:</strong> MetaFin Pro con analítica avanzada y asesoría IA.</li>
+          </ul>
+        </div>
+
+        <!-- Player 3 -->
+        <div class="character-card">
+          <div class="player-tag">JUGADOR 3 — EL GUARDIÁN</div>
+          <div class="character-avatar">👨‍👩‍👧</div>
+          <h3 class="character-name">PROFESIONAL / FAMILIA</h3>
+          <div class="character-demographics">35 a 50+ Años • Múltiples Responsabilidades</div>
+          <ul class="character-traits">
+            <li><strong>Dolor Principal:</strong> Colegios, servicios médicos, imprevistos familiares y apps bancarias rígidas.</li>
+            <li><strong>Motivación:</strong> Control conjunto con su pareja en "Gremios Privados", reportes claros y máxima privacidad.</li>
+            <li><strong>Disposición de Pago:</strong> Planes Anuales Familiares / Dúo y valoraciones transparentes.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         NIVEL 5: MODELOS DE NEGOCIO (ECONOMÍA DE MONEDAS & HORIZONTES)
+         ==================================================================== -->
+    <section class="arcade-section" id="nivel-negocio">
+      <div class="level-header">
+        <span class="level-badge purple">NIVEL 5: ECONOMÍA DE MONEDAS</span>
+        <h2 class="section-title">¿CUÁL ES EL MODELO DE NEGOCIO?</h2>
+      </div>
+
+      <!-- TABS DE NAVEGACIÓN DE MODELOS DE NEGOCIO -->
+      <div class="business-timeline-nav">
+        <button class="tab-btn active" data-target="model-b2c">
+          🪙 B2C (Corto Plazo)
+        </button>
+        <button class="tab-btn" data-target="model-b2b">
+          🏢 B2B (Mediano Plazo)
+        </button>
+        <button class="tab-btn" data-target="model-b2b2c">
+          🤝 B2B2C (Largo Plazo)
+        </button>
+        <button class="tab-btn" data-target="model-b2g">
+          🏛️ B2G (Futuro Escalable)
+        </button>
+      </div>
+
+      <!-- PANEL 1: B2C (CORTO PLAZO) -->
+      <div class="model-panel active" id="model-b2c">
+        <div class="model-header-grid">
+          <div class="model-title-group">
+            <h3>B2C: SUSCRIPCIONES, GREMIOS Y PASES COSMÉTICOS</h3>
+            <p style="color: var(--text-dim);">Tracción inmediata y monetización directa al usuario final.</p>
+          </div>
+          <span class="model-tag short">⏱️ CORTO PLAZO — TRACCIÓN INMEDIATA</span>
+        </div>
+
+        <!-- TOGGLE DE MONEDA (Bs / USD) -->
+        <div class="pricing-currency-toggle">
+          <span>Ver precios en:</span>
+          <label style="cursor: pointer; display: flex; align-items: center; gap: 4px; color: var(--neon-cyan);">
+            <input type="radio" name="currency-switch" value="bs" checked> Bolivianos (Bs)
+          </label>
+          <label style="cursor: pointer; display: flex; align-items: center; gap: 4px; color: var(--neon-pink); margin-left: 15px;">
+            <input type="radio" name="currency-switch" value="usd"> Dólares ($ USD)
+          </label>
+        </div>
+
+        <!-- CARDS DE PRICING B2C -->
+        <div class="pricing-cards-grid">
+          <div class="pricing-card">
+            <h4 class="pricing-title">METAFIN GRATIS</h4>
+            <div class="pricing-price">GRATIS</div>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 15px;">Registro ilimitado offline, 1 mundo a elección y 1 meta activa.</p>
+            <span class="powerup-badge">Para empezar el hábito</span>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-badge">MÁS POPULAR</div>
+            <h4 class="pricing-title">PRO INDIVIDUAL</h4>
+            <div class="pricing-price" data-price-bs="25 Bs/mes" data-price-usd="$2.49 USD/mes">25 Bs/mes</div>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 15px;">Acceso a los 3 mundos, metas y presupuestos ilimitados + 3 escudos/mes.</p>
+            <span class="powerup-badge" style="color: var(--neon-pink);">Validado en encuestas</span>
+          </div>
+
+          <div class="pricing-card">
+            <h4 class="pricing-title">PLAN DÚO & PAREJAS</h4>
+            <div class="pricing-price" data-price-bs="40 Bs/mes" data-price-usd="$4.99 USD/mes">40 Bs/mes</div>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 15px;">2 Cuentas Pro enlazadas para ahorrar juntos en metas compartidas.</p>
+            <span class="powerup-badge">Parejas e independientes</span>
+          </div>
+
+          <div class="pricing-card">
+            <h4 class="pricing-title">GREMIOS DE AMIGOS / FAMILIA</h4>
+            <div class="pricing-price" data-price-bs="60 Bs/mes" data-price-usd="$6.99 USD/mes">60 Bs/mes</div>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 15px;">Hasta 5 miembros. Retos grupales cooperativos para viajes y metas familiares.</p>
+            <span class="powerup-badge" style="color: var(--neon-yellow);">Ahorro en equipo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 2: B2B (MEDIANO PLAZO) -->
+      <div class="model-panel" id="model-b2b">
+        <div class="model-header-grid">
+          <div class="model-title-group">
+            <h3>B2B: BIENESTAR FINANCIERO CORPORATIVO</h3>
+            <p style="color: var(--text-dim);">Segmentado para PyMEs y Medianas/Grandes Empresas.</p>
+          </div>
+          <span class="model-tag mid">⏱️ MEDIANO PLAZO — ESCALABILIDAD B2B</span>
+        </div>
+
+        <div class="b2b-split-grid">
+          <!-- B2B para PyMEs y Startups -->
+          <div class="b2b-subcard">
+            <h4>🌱 PARA PYMES & STARTUPS</h4>
+            <p style="color: var(--neon-cyan); font-family: var(--font-terminal); font-size: 1.15rem; margin-bottom: 12px;">Equipos de 5 a 50 Colaboradores</p>
+            <ul class="comparator-list">
+              <li>
+                <span class="comparator-icon">🔹</span>
+                <div><strong>Planes Ágiles & Accesibles:</strong> Costo reducido por usuario para incentivar la retención de talento joven.</div>
+              </li>
+              <li>
+                <span class="comparator-icon">🔹</span>
+                <div><strong>Gestión de Hábitos:</strong> Retos de ahorro para empleados y fomento del fondo de imprevistos.</div>
+              </li>
+              <li>
+                <span class="comparator-icon">🔹</span>
+                <div><strong>Implementación Inmediata:</strong> Sin integraciones complejas de software.</div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- B2B para Medianas y Grandes Empresas -->
+          <div class="b2b-subcard" style="border-color: var(--neon-purple);">
+            <h4 style="color: var(--neon-purple);">🏢 PARA MEDIANAS & GRANDES EMPRESAS</h4>
+            <p style="color: var(--neon-purple); font-family: var(--font-terminal); font-size: 1.15rem; margin-bottom: 12px;">+50 Colaboradores • Departamentos de RRHH</p>
+            <ul class="comparator-list">
+              <li>
+                <span class="comparator-icon">🔸</span>
+                <div><strong>Reducción de Estrés Financiero:</strong> Disminuye el ausentismo laboral y los anticipos de sueldo urgentes.</div>
+              </li>
+              <li>
+                <span class="comparator-icon">🔸</span>
+                <div><strong>Panel de RRHH (100% Anónimo):</strong> Métricas agregadas sobre salud financiera corporativa.</div>
+              </li>
+              <li>
+                <span class="comparator-icon">🔸</span>
+                <div><strong>Talleres & Simuladores de Inversión:</strong> Capacitaciones gamificadas a medida.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: B2B2C (LARGO PLAZO) -->
+      <div class="model-panel" id="model-b2b2c">
+        <div class="model-header-grid">
+          <div class="model-title-group">
+            <h3>B2B2C: MERCADO DE RECOMPENSAS & AFILIADOS</h3>
+            <p style="color: var(--text-dim);">Monetización del 95% de usuarios gratuitos mediante alianzas éticas.</p>
+          </div>
+          <span class="model-tag long">⏱️ LARGO PLAZO — ECOSISTEMA DE ALIANZAS</span>
+        </div>
+
+        <div class="stat-cards-grid" style="margin-bottom: 20px;">
+          <div class="stat-pixel-card" style="border-color: var(--neon-pink);">
+            <div class="stat-pixel-number" style="font-size: 2rem;">CPA $15 - $35</div>
+            <div class="stat-pixel-label">Por Cuenta Abierta</div>
+            <p class="stat-pixel-desc">Los Neobancos pagan comisión por usuarios con hábitos comprobados de ahorro.</p>
+          </div>
+
+          <div class="stat-pixel-card" style="border-color: var(--neon-cyan);">
+            <div class="stat-pixel-number" style="font-size: 2rem;">Cofres Reales</div>
+            <div class="stat-pixel-label">Recompensas & Cashback</div>
+            <p class="stat-pixel-desc">Al cumplir retos en MetaFin, los usuarios desbloquean descuentos reales con comercios aliados.</p>
+          </div>
+
+          <div class="stat-pixel-card" style="border-color: var(--neon-yellow);">
+            <div class="stat-pixel-number" style="font-size: 2rem;">95%</div>
+            <div class="stat-pixel-label">Margen Bruto</div>
+            <p class="stat-pixel-desc">Ingresos escalables por referencia calificada sin depender únicamente de suscripciones.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 4: B2G (FUTURO ESCALABLE) -->
+      <div class="model-panel" id="model-b2g">
+        <div class="model-header-grid">
+          <div class="model-title-group">
+            <h3>B2G: ALFABETIZACIÓN E INCLUSIÓN FINANCIERA NACIONAL</h3>
+            <p style="color: var(--text-dim);">Convenios con Gobiernos, Ministerios y Universidades Públicas/Privadas.</p>
+          </div>
+          <span class="model-tag future">🌌 FUTURO ESCALABLE — ¡EL CIELO ES EL LÍMITE!</span>
+        </div>
+
+        <div class="investor-highlight-box" style="border-color: var(--neon-purple); margin-bottom: 20px;">
+          <div class="highlight-label" style="color: var(--neon-purple);">
+            <span>🚀</span> VISIÓN DE IMPACTO REGIONAL Y SOCIAL
+          </div>
+          <p class="highlight-text">
+            MetaFin se proyecta como la <strong>plataforma de referencia pública y universitaria</strong> para erradicar el analfabetismo financiero juvenil en Latinoamérica. Mediante alianzas con Ministerios de Educación y fondos multilaterales (BID, CAF), MetaFin puede desplegarse en escuelas secundarias y facultades, convirtiendo las políticas públicas de inclusión financiera en programas gamificados medibles en tiempo real.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         NIVEL EXTRA: MINI-JUEGO INTERACTIVO (DECISIÓN FINANCIERA RPG)
+         ==================================================================== -->
+    <section class="arcade-section" id="mini-game">
+      <div class="level-header">
+        <span class="level-badge gold">NIVEL EXTRA: SIMULADOR EN VIVO</span>
+        <h2 class="section-title">EXPEDICIÓN METAFIN: TU DECISIÓN EN LA MAZMORRA</h2>
+      </div>
+
+      <div class="minigame-arena">
+        <div class="minigame-screen">
+          <div class="minigame-avatar">🐱⚔️</div>
+          <p class="minigame-scenario">
+            <strong>Misión Diaria de 3 Minutos en MetaFin Quest:</strong><br>
+            ¡Tu avatar acaba de recibir un bono imprevisto de <strong>200 Bs</strong> en su aventura! Frente a ti aparece un portal de compras tentadoras. ¿Cómo diriges a tu personaje?
+          </p>
+
+          <div class="minigame-options">
+            <button class="btn-game-choice" id="game-choice-a">
+              🛍️ Ceder a la tentación y gastar todo en compras impulsivas
+            </button>
+            <button class="btn-game-choice" id="game-choice-b" style="border-color: var(--neon-green);">
+              🛡️ Estrategia Dual: 100 Bs al Fondo de Emergencia + 100 Bs a Misión de Ahorro
+            </button>
+            <button class="btn-game-choice" id="game-choice-c" style="border-color: var(--neon-cyan);">
+              ⏳ Activar Escudo Anti-Racha y posponer la compra 48 horas
+            </button>
+          </div>
+
+          <div class="minigame-result" id="game-result-box"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         NIVEL EXTRA: SECTOR DE AGRADECIMIENTO ESPECIAL
+         ==================================================================== -->
+    <section class="arcade-section" id="agradecimiento">
+      <div class="level-header">
+        <span class="level-badge pink">NIVEL EXTRA: RECONOCIMIENTO & GRATITUD</span>
+        <h2 class="section-title">SALÓN DE AGRADECIMIENTOS & RECONOCIMIENTOS</h2>
+      </div>
+
+      <div class="gratitude-arena">
+        <div class="gratitude-ribbon">🏆 MENCIÓN DE HONOR & RECONOCIMIENTO ESPECIAL</div>
+        <h3 class="gratitude-title">¡GRACIAS AL EQUIPO INCUBA UNIÓN!</h3>
+        <p class="gratitude-body">
+          Queremos expresar nuestro más sincero y profundo agradecimiento al <strong>Equipo Incuba Unión</strong> por brindarnos la oportunidad, la confianza y el espacio para desarrollar y estructurar este proyecto. Cada sesión de capacitación, los valiosos <strong>consejos de mentoría</strong> y su constante retroalimentación han sido fundamentales para transformar una idea en una solución de alto impacto, viable y escalable para la juventud y las familias.
+        </p>
+
+        <div class="gratitude-badges-grid">
+          <div class="gratitude-badge">🌟 Equipo Incuba Unión</div>
+          <div class="gratitude-badge">✨ Mentoría & Capacitación de Alto Nivel</div>
+          <div class="gratitude-badge">🚀 Impulso al Ecosistema Emprendedor</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         LLAMADO A LA ACCIÓN / PIE DE PÁGINA
+         ==================================================================== -->
+    <section class="arcade-cta">
+      <div class="insert-coin-banner">★ PRESIONA START PARA UNIRTE A LA AVENTURA METAFIN ★</div>
+      <p style="font-size: 1.2rem; color: var(--text-dim); max-width: 600px; margin: 0 auto 30px;">
+        ¿Listo para transformar la educación y gestión financiera en una experiencia gamificada rentable y escalable?
+      </p>
+      <a href="#nivel-problema" class="btn-arcade-primary" style="font-size: 1.1rem; padding: 18px 36px;">
+        🕹️ REVISAR EL PITCH COMPLETO
+      </a>
+    </section>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="arcade-footer">
+    <div class="arcade-container">
+      <p>© 2026 METAFIN — Inteligencia Financiera Gamificada. Diseñado con temática 8-Bit Arcade.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="retro-engine.js"></script>
+</body>
+</html>
